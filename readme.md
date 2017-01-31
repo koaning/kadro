@@ -12,12 +12,12 @@ Kadro is a small python package that wraps a little bit of extra functionality a
 import kadro as kd
 
 (kd.Frame(df)
-  .mutate(e = lambda _: _['a'] + _['b'],
-          f = lambda _: np.sqrt(_['e']))
-  .group_by("c", "d")
-  .agg(m_e = lambda _: np.mean(_['e']),
-       v_f = lambda _: np.var(_['f']),
-       cov_ef = lambda _: np.cov(_['e'], _['f'])[1,1])
+  .mutate(e = lambda _: _.a + _.b,
+          f = lambda _: np.sqrt(_.e))
+  .group_by('c', 'd')
+  .agg(m_e = lambda _: np.mean(_.e),
+       v_f = lambda _: np.var(_.f),
+       cov_ef = lambda _: np.cov(_.e, _.f)[1,1])
   .sort('m_e'))
 ```
 
@@ -66,8 +66,8 @@ Currently, the following verbs are supported in Kadro;
 - sort
 - sample_n
 - pipe
-- gather/spread
-- left_join/inner_join
+- ~~gather/spread~~
+- ~~left_join/inner_join~~
 
 ## Vignette
 
