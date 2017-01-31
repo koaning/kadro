@@ -2,9 +2,9 @@
 
 ### Kadro is currently in active development. No full test coverage yet.
 
-![Imgur](http://i.imgur.com/Zzru9Qa.png)
-
 > Kadro means frame in esperanto.
+
+![Imgur](http://i.imgur.com/Zzru9Qa.png)
 
 Kadro is a small python package that wraps a little bit of extra functionality around pandas. The goal is to add more functional methods such that you can use pandas in a more composable manner. For example, you may do queries like;
 
