@@ -19,12 +19,13 @@ import kadro as kd
   .sort('m_e'))
 ```
 
-This statement looks very similar to normal aggregation code from `pandas`. In steps it does the following;
+This statement may feel similar to normal aggregation code from `pandas` combined with some parts from `tidyverse` in R. In steps it does the following;
 
-1. It takes the original datastructure and it adds two new columns; `e` and `f`. These columns are based off the columns `a` and `b` and we refer to these series via lambda functions. These lambda functions assume the original pandas dataframe to be passed.
-2. It then groups the datastructure via the columns `c` and `d`.
-3. It then aggregates this dataset by calculating the mean value of column `e`, the variance of column `f` and by calculating the covariance between `e` and `f`. Again, we can use any function that is able to aggregate a series object to a singleton value.
-4. Finally, it sorts this aggregated datastructure by the newly created column `m_e`, which denotes the calculated mean of `e` that was calculated in the step before.
+1. It takes a pandas dataframe and casts it to a `kadro.Frame` object. It is merely a wrapper with some methods attached.
+2. It takes new datastructure and it adds two new columns; `e` and `f`. These columns are based off the columns `a` and `b` and we refer to these series via lambda functions. These lambda functions assume the original pandas dataframe to be passed.
+3. It then groups the datastructure via the columns `c` and `d`.
+4. It then aggregates this dataset by calculating the mean value of column `e`, the variance of column `f` and by calculating the covariance between `e` and `f`. Again, we can use any function that is able to aggregate a series object to a singleton value.
+5. Finally, it sorts this aggregated datastructure by the newly created column `m_e`, which denotes the calculated mean of `e` that was calculated in the step before.
 
 The statements are readable and may remind you of the original pandas library. Note a few key differences.
 
@@ -50,6 +51,21 @@ When comparing with pandas there are a few notable differences;
 - data is immutable, all methods will cause a new datastructure object to be created
 - the only way to cache intermediate results is to save the state into a variable
 - methods tend to be lazy, meaning that the functions of methods like `mutate` are evaluated in order
+
+## Key Verbs
+
+Currently, the following verbs are supported in Kadro;
+
+- mutate
+- filter
+- head/tail/slice
+- select/rename/drop
+- group_by/agg/ungroup
+- sort
+- sample_n
+- pipe
+- gather/spread
+- left_join/inner_join
 
 ## Vignette
 
