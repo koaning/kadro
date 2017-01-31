@@ -19,9 +19,9 @@ Kadro is a small python package that wraps a little bit of extra functionality a
 
 This statement looks very similar to normal aggregation code from `pandas`. In steps it does the following;
 
-1. It takes the original datastructure and it adds two new columns; `e` and `f` which are based off the columns `a` and `b`.
+1. It takes the original datastructure and it adds two new columns; `e` and `f`. These columns are based off the columns `a` and `b` and we refer to these series via lambda functions. These lambda functions assume the original pandas dataframe to be passed.
 2. It then groups the datastructure via the columns `c` and `d`.
-3. It then aggregates this dataset by calculating the mean value of column `e`, the variance of column `f` and by calculating the covariance between `e` and `f`.
+3. It then aggregates this dataset by calculating the mean value of column `e`, the variance of column `f` and by calculating the covariance between `e` and `f`. Again, we can use any function that is able to aggregate a series object to a singleton value.
 4. Finally, it sorts this aggregated datastructure by the newly created column `m_e`, which denotes the calculated mean of `e` that was calculated in the step before.
 
 The statements are readable and may remind you of the original pandas library. Note a few key differences.
