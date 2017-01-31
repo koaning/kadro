@@ -3,14 +3,14 @@ import pandas as pd
 import itertools as it
 
 
-class Tibble:
+class Frame:
     """
     A datastructure that adds methods on top of pandas.
 
     Example:
     import numpy as np
     import pandas as pd
-    import tibble as tb
+    import Kadro as tb
 
     np.random.seed(42)
     n = 40
@@ -29,6 +29,7 @@ class Tibble:
         self.df.index = np.arange(df.shape[0])
         self.shape = self.df.shape
         self.groups = groups
+        self.columns = df.columns
 
     def __repr__(self):
         res = "Pandas derived TibbleFrame Object.\n"
@@ -43,7 +44,7 @@ class Tibble:
         for key in kwargs.keys():
             new_row = pd.concat([group[1].pipe(kwargs[key]) for group in grouped])
             df_copy[key] = new_row
-        return Tibble(df_copy, self.groups[:])
+        return Frame(df_copy, self.groups[:])
 
     def show(self, n = 10):
         """
@@ -72,7 +73,7 @@ class Tibble:
         df_copy = self.df.copy()
         for mut in kwargs.keys():
             df_copy[mut] = kwargs[mut](df_copy)
-        return Tibble(df_copy, self.groups[:])
+        return Frame(df_copy, self.groups[:])
 
     def filter(self, *args):
         """
@@ -85,7 +86,7 @@ class Tibble:
         for func in args:
             predicate = func(df_copy)
             df_copy = df_copy[predicate]
-        return Tibble(df_copy, self.groups[:])
+        return Frame(df_copy, self.groups[:])
 
     def select(self, *args):
         """
@@ -97,7 +98,7 @@ class Tibble:
         """
         columns = list(it.chain(*args))
         df_copy = self.df.copy()
-        return Tibble(df_copy[columns], self.groups[:])
+        return Frame(df_copy[columns], self.groups[:])
 
     def rename(self, rename_dict):
         """
@@ -110,7 +111,7 @@ class Tibble:
         """
         df_copy = self.df.copy()
         df_copy = df_copy.rename(index=str, columns = rename_dict)
-        return Tibble(df_copy, self.groups[:])
+        return Frame(df_copy, self.groups[:])
 
 
     def set_names(self, names):
@@ -122,7 +123,7 @@ class Tibble:
         """
         df_copy = self.df.copy()
         df_copy.columns = names
-        return Tibble(df_copy, self.groups[:])
+        return Frame(df_copy, self.groups[:])
 
     def drop(self, *args):
         """
@@ -134,7 +135,7 @@ class Tibble:
         """
         df_copy = self.df.copy()
         columns = [_ for _ in df_copy.columns if _ not in it.chain(*args)]
-        return Tibble(df_copy[columns], self.groups[:])
+        return Frame(df_copy[columns], self.groups[:])
 
     def sort(self, *args, ascending = True):
         """
@@ -148,7 +149,7 @@ class Tibble:
         df_copy = self.df.copy()
         sort_cols = self.groups + [arg for arg in args]
         df_sorted = df_copy.sort_values(sort_cols, ascending=ascending)
-        return Tibble(df_sorted, self.groups[:])
+        return Frame(df_sorted, self.groups[:])
 
     def group_by(self, *args):
         """
@@ -163,13 +164,13 @@ class Tibble:
         group_names = [_ for _ in args]
         if any([_ not in self.df.columns for _ in group_names]):
             raise TibbleError("Wrong column name in .group_by method: does not exist.")
-        return Tibble(self.df.copy(), group_names[:])
+        return Frame(self.df.copy(), group_names[:])
 
     def ungroup(self):
         """
         Removes any group from the datastructure.
         """
-        return Tibble(self.df.copy(), [])
+        return Frame(self.df.copy(), [])
 
     def pipe(self, func, *args, **kwargs):
         """
@@ -184,11 +185,11 @@ class Tibble:
         """
         df_copy = self.df.copy()
         new_df = df_copy.pipe(func, *args, **kwargs)
-        return Tibble(new_df, self.groups[:])
+        return Frame(new_df, self.groups[:])
 
     def _agg_nogroups(self, **kwargs):
         new_df = pd.DataFrame({k: v(self.df) for k, v in kwargs.items()}, index = [0])
-        return Tibble(new_df, [])
+        return Frame(new_df, [])
 
     def agg(self, **kwargs):
         """
@@ -212,7 +213,7 @@ class Tibble:
         res = [grouped.apply(kwargs[_]) for _ in kwargs.keys()]
         res = pd.concat(res, axis = 1).reset_index()
         res.columns = self.groups + list(kwargs.keys())
-        return Tibble(res, [])
+        return Frame(res, [])
 
     def gather(self, key = "key", value="value", keep = []):
         """
@@ -231,7 +232,7 @@ class Tibble:
         copy_df = pd.melt(copy_df,
                           id_vars = keep,
                           value_vars=[_ for _ in copy_df.columns if _ not in keep])
-        return Tibble(copy_df, []).rename({"variable": key, "value": value})
+        return Frame(copy_df, []).rename({"variable": key, "value": value})
 
     def spread(self, key = "key", value="key", keep = []):
         """
@@ -252,7 +253,7 @@ class Tibble:
         df_copy = self.df.copy()
         idx = np.arange(df_copy.shape[0])
         row_ids = np.random.choice(idx, size = n_samples, replace = replace)
-        return Tibble(df_copy.iloc[row_ids], self.groups[:])
+        return Frame(df_copy.iloc[row_ids], self.groups[:])
 
     def head(self, n = 5):
         """
@@ -261,7 +262,7 @@ class Tibble:
         Example:
         tf.head(10)
         """
-        return Tibble(self.df.copy().head(n), self.groups[:])
+        return Frame(self.df.copy().head(n), self.groups[:])
 
     def tail(self, n = 5):
         """
@@ -270,7 +271,7 @@ class Tibble:
         Example:
         tf.tail(10)
         """
-        return Tibble(self.df.copy().tail(n), self.groups[:])
+        return Frame(self.df.copy().tail(n), self.groups[:])
 
     def slice(self, *args):
         """
@@ -283,4 +284,23 @@ class Tibble:
         if len(args) > 1:
             return self.slice(args)
         df_copy = self.df.copy()
-        return Tibble(df_copy.iloc[args], self.groups[:])
+        return Frame(df_copy.iloc[args], self.groups[:])
+
+    def _check_join_params(self, other, by):
+        if not by:
+            by = set(self.columns).intersection(other.columns)
+        if len(by) == 0:
+            raise ValueError("Columns do not overlap!")
+        for i in by:
+            if (i not in self.columns) or (i not in other.columns):
+                raise ValueError("Column {} does not overlap in both datastructures".format(i))
+
+    def left_join(self, other, by = None):
+        self._check_join_params(other, by)
+        new = pd.merge(self.df.copy(), other.df.copy(), how = 'left', on = by)
+        return Frame(new, self.groups[:])
+
+    def inner_join(self, other, by = None):
+        self._check_join_params(other, by)
+        new = pd.merge(self.df.copy(), other.df.copy(), how = 'inner', on = by)
+        return Frame(new, self.groups[:])

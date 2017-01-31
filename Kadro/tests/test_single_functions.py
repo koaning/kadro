@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from tibble import tibble as tb
+from Kadro import kadro as tb
 
 np.random.seed(42)
 n = 20
@@ -12,7 +12,7 @@ df = pd.DataFrame({
     'd': ['fizz' if x > 0.6 else 'bo' for x in np.random.rand(n)]
 })
 df = df.sort_values(['c', 'd'])
-tf = tb.Tibble(df)
+tf = tb.Frame(df)
 
 class TestMutate(unittest.TestCase):
 
