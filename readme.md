@@ -51,5 +51,9 @@ When comparing with pandas there are a few notable differences;
 
 ## Vignette
 
-Although we also generate some data, the best way to understand the library is to read the vignette. In the main of the repo you'll find a notebook containing all the functionality.
+Although we also generate some documentation, the best way to understand the library is to read the vignette. In the main of the repo you'll find a notebook containing all the functionality.
+
+## Future
+
+This package is a little bit experimental in nature and was originally meant as a peronsal project. I may extra support if it gets traction. Feel free to notify me of issues.
 
