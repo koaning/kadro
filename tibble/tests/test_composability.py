@@ -14,28 +14,18 @@ df = pd.DataFrame({
 df = df.sort_values(['c', 'd'])
 tf = tb.Tibble(df)
 
-class TestMutate(unittest.TestCase):
+class Composables(unittest.TestCase):
 
-    def test_mutate_single(self):
-        """Test that you can add a single column."""
-        new = tf.mutate(e = lambda _: _['a'] + _['b']*2)
-        self.assertEqual(len(new.df.columns), 5)
-
-    def test_mutate_mult1(self):
-        """Test that you can add multiple columns."""
+    def test_compose1(self):
+        """Test that grouping has an effect on mutate."""
         new = (tf
-               .mutate(e=lambda _: _['a'] + _['b'] * 2,
-                       f=lambda _: np.sqrt(_['e']),
-                       q=lambda _: _['a'] / 2))
-        self.assertEqual(len(new.df.columns), 7)
-
-    def test_mutate_mult2(self):
-        """Test that you can add multiple columns and overwrite."""
-        new = (tf
-               .mutate(e=lambda _: _['a'] + _['b'] * 2,
-                       f=lambda _: np.sqrt(_['e']),
-                       a=lambda _: _['a'] / 2))
-        self.assertEqual(len(new.df.columns), 6)
+               .group_by('c', 'd')
+               .mutate(e = lambda _: _['a'].shift())
+               .ungroup())
+        print(new)
+        self.assertEqual(len(new.groups), 0)
+        self.assertEqual(new.df.iloc[0]['a'], new.df.iloc[1]['e'])
+        self.assertEqual(np.isnan(new.df.iloc[0]['e']), True)
 
 
 if __name__ == '__main__':

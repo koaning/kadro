@@ -27,6 +27,7 @@ class Tibble:
     def __init__(self, df, groups = []):
         self.df = df.copy()
         self.df.index = np.arange(df.shape[0])
+        self.shape = self.df.shape
         self.groups = groups
 
     def __repr__(self):
