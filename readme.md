@@ -7,14 +7,16 @@
 Kadro is a small python package that wraps a little bit of extra functionality around pandas. The goal is to add more functional methods such that you can use pandas in a more composable manner. For example, you may do queries like;
 
 ```
-(df
- .mutate(e = lambda _: _['a'] + _['b'],
-         f = lambda _: np.sqrt(_['e']))
- .group_by("c", "d")
- .agg(m_e = lambda _: np.mean(_['e']),
-      v_f = lambda _: np.var(_['f']),
-      cov_ef = lambda _: np.cov(_['e'], _['f'])[1,1])
- .sort('m_e'))
+import kadro as kd
+
+(kd.Frame(df)
+  .mutate(e = lambda _: _['a'] + _['b'],
+          f = lambda _: np.sqrt(_['e']))
+  .group_by("c", "d")
+  .agg(m_e = lambda _: np.mean(_['e']),
+       v_f = lambda _: np.var(_['f']),
+       cov_ef = lambda _: np.cov(_['e'], _['f'])[1,1])
+  .sort('m_e'))
 ```
 
 This statement looks very similar to normal aggregation code from `pandas`. In steps it does the following;
