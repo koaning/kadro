@@ -2,6 +2,8 @@
 
 ### Kadro is currently in active development. No full test coverage yet.
 
+![Imgur](http://i.imgur.com/Zzru9Qa.png)
+
 > Kadro means frame in esperanto.
 
 Kadro is a small python package that wraps a little bit of extra functionality around pandas. The goal is to add more functional methods such that you can use pandas in a more composable manner. For example, you may do queries like;
@@ -69,7 +71,7 @@ Currently, the following verbs are supported in Kadro;
 
 ## Vignette
 
-Although we also generate some documentation, the best way to understand the library is to read the vignette. In the main of the repo you'll find a notebook containing all the functionality.
+Although we also generate some documentation, the best way to understand the library is to read the vignette. In the main of the repo you'll find a notebook containing a demonstration of all the functionality.
 
 ## Future
 
