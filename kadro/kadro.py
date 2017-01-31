@@ -10,7 +10,7 @@ class Frame:
     Example:
     import numpy as np
     import pandas as pd
-    import Kadro as tb
+    import kadro as kd
 
     np.random.seed(42)
     n = 40
@@ -22,7 +22,7 @@ class Frame:
         'd': ['fizz' if x > 0.5 else 'bo' for x in np.random.rand(n)]
     })
 
-    tf = tb.Tibble(df)
+    kf = kd.Frame(df)
     """
     def __init__(self, df, groups = []):
         self.df = df.copy()
@@ -66,7 +66,7 @@ class Frame:
         Creates or changes a column. Keeps groups in mind.
 
         Example:
-        tf.mutate(a = lambda _: _['col1'] + _['col2']*2)
+        kf.mutate(a = lambda _: _['col1'] + _['col2']*2)
         """
         if len(self.groups) != 0:
             return self._group_mutate(**kwargs)
@@ -80,7 +80,7 @@ class Frame:
         Filter rows to keep.
 
         Example: Example:
-        tf.filter(lambda _: _['col1'] > 20)
+        kf.filter(lambda _: _['col1'] > 20)
         """
         df_copy = self.df.copy()
         for func in args:
@@ -93,8 +93,8 @@ class Frame:
         Select a subset of the columns.
 
         Example:
-        tf.select("col1", "col2")
-        tf.select(["col1", "col2"])
+        kf.select("col1", "col2")
+        kf.select(["col1", "col2"])
         """
         columns = list(it.chain(*args))
         df_copy = self.df.copy()
@@ -107,7 +107,7 @@ class Frame:
         the old names and the values represent the new names.
 
         Example:
-        tf.rename({"aa":"a", "bb":"b"})
+        kf.rename({"aa":"a", "bb":"b"})
         """
         df_copy = self.df.copy()
         df_copy = df_copy.rename(index=str, columns = rename_dict)
@@ -119,7 +119,7 @@ class Frame:
         Expects a list of strings and will reset the column names.
 
         Example:
-        tf.set_names(["a", "b", "c", "omg_d")
+        kf.set_names(["a", "b", "c", "omg_d")
         """
         df_copy = self.df.copy()
         df_copy.columns = names
@@ -130,8 +130,8 @@ class Frame:
         Drops columns from the dataframe.
 
         Example:
-        tf.drop("col1")
-        tf.drop(["col1", "col2"])
+        kf.drop("col1")
+        kf.drop(["col1", "col2"])
         """
         df_copy = self.df.copy()
         columns = [_ for _ in df_copy.columns if _ not in it.chain(*args)]
@@ -143,8 +143,8 @@ class Frame:
         Works just like .sort_values in pandas but keeps groups in mind.
 
         Example:
-        tf.sort("col1")
-        tf.sort(["col1", "col2"], ascending=[True, False])
+        kf.sort("col1")
+        kf.sort(["col1", "col2"], ascending=[True, False])
         """
         df_copy = self.df.copy()
         sort_cols = self.groups + [arg for arg in args]
@@ -158,8 +158,8 @@ class Frame:
         if you want to remove the grouping on the datastructure.
 
         Example:
-        tf.group_by("col1")
-        tf.group_by("col1", "col2")
+        kf.group_by("col1")
+        kf.group_by("col1", "col2")
         """
         group_names = [_ for _ in args]
         if any([_ not in self.df.columns for _ in group_names]):
@@ -181,7 +181,7 @@ class Frame:
             <stuff>
         def large_function2(frame):
             <stuff>
-        tf.pipe(large_function1).pipe(large_function2)
+        kf.pipe(large_function1).pipe(large_function2)
         """
         df_copy = self.df.copy()
         new_df = df_copy.pipe(func, *args, **kwargs)
@@ -197,7 +197,7 @@ class Frame:
         is present it will just aggregate the entire table.
 
         Example:
-        tf.group_by("col1").agg(m1 = lambda _: np.mean(_['m1']))
+        kf.group_by("col1").agg(m1 = lambda _: np.mean(_['m1']))
 
         Example:
         (tf
@@ -226,7 +226,7 @@ class Frame:
             'c': 'a,a,a,a,b,b,b,b'.split(',')
         })
         tf = tb.Tibble(df)
-        tf.gather("key", "value")
+        kf.gather("key", "value")
         """
         copy_df = self.df.copy()
         copy_df = pd.melt(copy_df,
@@ -247,8 +247,8 @@ class Frame:
         Samples `n_samples` rows from the datastructure. You can do it with, or without, replacement.
 
         Example:
-        tf.n_sample(100)
-        tf.n_sample(1000, replace = True)
+        kf.n_sample(100)
+        kf.n_sample(1000, replace = True)
         """
         df_copy = self.df.copy()
         idx = np.arange(df_copy.shape[0])
@@ -260,7 +260,7 @@ class Frame:
         Mimic of pandas head function. Selects `n` top rows.
 
         Example:
-        tf.head(10)
+        kf.head(10)
         """
         return Frame(self.df.copy().head(n), self.groups[:])
 
@@ -269,7 +269,7 @@ class Frame:
         Mimic of pandas tail function. Selects `n` bottom rows.
 
         Example:
-        tf.tail(10)
+        kf.tail(10)
         """
         return Frame(self.df.copy().tail(n), self.groups[:])
 
@@ -278,8 +278,8 @@ class Frame:
         Slice away rows of the dataframe based on row number.
 
         Example:
-        tf.slice(1,2,3)
-        tf.slice([1,2,3,])
+        kf.slice(1,2,3)
+        kf.slice([1,2,3,])
         """
         if len(args) > 1:
             return self.slice(args)

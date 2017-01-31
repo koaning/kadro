@@ -24,7 +24,7 @@ import kadro as kd
 This statement may feel similar to normal aggregation code from `pandas` combined with some parts from `tidyverse` in R. In steps it does the following;
 
 1. It takes a pandas dataframe and casts it to a `kadro.Frame` object. It is merely a wrapper with some methods attached.
-2. It takes new datastructure and it adds two new columns; `e` and `f`. These columns are based off the columns `a` and `b` and we refer to these series via lambda functions. These lambda functions assume the original pandas dataframe to be passed.
+2. It takes the new datastructure and it adds two new columns; `e` and `f`. These columns are based off the columns `a` and `b` and we access these series via lambda functions. These lambda functions assume the original pandas dataframe to be passed.
 3. It then groups the datastructure via the columns `c` and `d`.
 4. It then aggregates this dataset by calculating the mean value of column `e`, the variance of column `f` and by calculating the covariance between `e` and `f`. Again, we can use any function that is able to aggregate a series object to a singleton value.
 5. Finally, it sorts this aggregated datastructure by the newly created column `m_e`, which denotes the calculated mean of `e` that was calculated in the step before.
