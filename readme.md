@@ -68,10 +68,13 @@ Currently, the following verbs are supported in Kadro;
 - pipe
 - ~~gather/spread~~
 - ~~left_join/inner_join~~
+- plot
 
 ## Vignette
 
-Although we also generate some documentation, the best way to understand the library is to read the vignette. In the main of the repo you'll find a notebook containing a demonstration of all the functionality.
+We do not host documentation for this small package currently.
+
+Instead you fill find that all methods are properly documented with a docstring and that perhaps the best way to understand the library is to read the vignette; a notebook containing a demonstration of all the functionality from a-z. In the main of the repo you'll find a notebook containing a demonstration of all the functionality which can render from github.
 
 ## Installation
 
