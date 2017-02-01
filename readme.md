@@ -73,6 +73,14 @@ Currently, the following verbs are supported in Kadro;
 
 Although we also generate some documentation, the best way to understand the library is to read the vignette. In the main of the repo you'll find a notebook containing a demonstration of all the functionality.
 
+## Installation
+
+Working on pip/conda, for now you can install kadro via;
+
+```
+python setup.py install
+```
+
 ## Future
 
 This package is a little bit experimental in nature and was originally meant as a peronsal project. I may extra support if it gets traction. Feel free to notify me of issues.
