@@ -84,6 +84,14 @@ Working on pip/conda, for now you can install kadro via;
 python setup.py install
 ```
 
+## Contributions
+
+Contributions are welcome but the package is to remain minimal. If people want to add some extra tests; thats fine. You can run tests via;
+
+```
+pytest
+```
+
 ## Future
 
 This package is a little bit experimental in nature and was originally meant as a peronsal project. I may extra support if it gets traction. Feel free to notify me of issues.
