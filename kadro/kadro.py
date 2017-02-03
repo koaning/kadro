@@ -5,28 +5,28 @@ import itertools as it
 
 class Frame:
     """
-    Add a group to the datastructure. Will have effect on .agg/.sort/.mutate methods.
-    Calling .agg after grouping will remove it. Otherwise you need to call .ungroup
-    if you want to remove the grouping on the datastructure.
+    Creates a `kadro.Frame` object out of a `pandas.DataFrame` object. Will ignore index.
+    Datastructure is immutable but reference to `pandas.DataFrame` is always kept.
 
-        Example:
-        import numpy as np
-        import pandas as pd
-        import kadro as kd
+    <pre>Example:
+    import numpy as np
+    import pandas as pd
+    import kadro as kd
 
-        np.random.seed(42)
-        n = 40
-        r1 = np.random.rand(n)
-        r2 = np.random.rand(n)
+    np.random.seed(42)
+    n = 40
+    r1 = np.random.rand(n)
+    r2 = np.random.rand(n)
 
-        df = pd.DataFrame({
-            'a': np.random.randn(n),
-            'b': np.random.randn(n),
-            'c': ['foo' if x > 0.5 else 'bar' for x in r1],
-            'd': ['fizz' if x > 0.5 else 'bo' for x in r2]
-        })
+    df = pd.DataFrame({
+        'a': np.random.randn(n),
+        'b': np.random.randn(n),
+        'c': ['foo' if x > 0.5 else 'bar' for x in r1],
+        'd': ['fizz' if x > 0.5 else 'bo' for x in r2]
+    })
 
-        kf = kd.Frame(df)
+    kf = kd.Frame(df)
+    </pre>
     """
     def __init__(self, df, groups = []):
         self.df = df.copy()
@@ -62,8 +62,10 @@ class Frame:
         """
         Shows the `n` top items of a the datastructure.
 
-            Example:
-            kd.show(20)
+        <pre>Example:
+        kf.group_by("col1")
+        kf.group_by("col1", "col2")
+        </pre>
         """
         res = "Pandas derived TibbleFrame Object.\n"
         if len(self.groups) > 0:
@@ -80,8 +82,9 @@ class Frame:
         """
         Creates or changes a column. Keeps groups in mind.
 
-            Example:
-            kf.mutate(a = lambda _: _['col1'] + _['col2']*2)
+        <pre>Example:
+        kf.mutate(a = lambda _: _['col1'] + _['col2']*2)
+        </pre>
         """
         if len(self.groups) != 0:
             return self._group_mutate(**kwargs)
@@ -94,8 +97,9 @@ class Frame:
         """
         Filter rows to keep.
 
-            Example:
-            kf.filter(lambda _: _['col1'] > 20)
+        <pre>Example:
+        kf.filter(lambda _: _['col1'] > 20)
+        </pre>
         """
         df_copy = self.df.copy()
         for func in args:
@@ -107,9 +111,10 @@ class Frame:
         """
         Select a subset of the columns.
 
-        Example:
+        <pre>Example:
         kf.select("col1", "col2")
         kf.select(["col1", "col2"])
+        </pre>
         """
         columns = list(it.chain(*args))
         df_copy = self.df.copy()
@@ -121,8 +126,9 @@ class Frame:
         Expects a a dictionary of strings where the keys represent
         the old names and the values represent the new names.
 
-            Example:
-            kf.rename({"aa":"a", "bb":"b"})
+        <pre>Example:
+        kf.rename({"aa":"a", "bb":"b"})
+        </pre>
         """
         df_copy = self.df.copy()
         df_copy = df_copy.rename(index=str, columns = rename_dict)
@@ -133,8 +139,9 @@ class Frame:
         """
         Expects a list of strings and will reset the column names.
 
-            Example:
-            kf.set_names(["a", "b", "c", "omg_d")
+        <pre>Example:
+        kf.set_names(["a", "b", "c", "omg_d")
+        </pre>
         """
         df_copy = self.df.copy()
         df_copy.columns = names
@@ -144,9 +151,10 @@ class Frame:
         """
         Drops columns from the dataframe.
 
-            Example:
-            kf.drop("col1")
-            kf.drop(["col1", "col2"])
+        <pre>Example:
+        kf.drop("col1")
+        kf.drop(["col1", "col2"])
+        </pre>
         """
         df_copy = self.df.copy()
         columns = [_ for _ in df_copy.columns if _ not in it.chain(*args)]
@@ -157,9 +165,10 @@ class Frame:
         Sort the data structure based on *args passed in.
         Works just like .sort_values in pandas but keeps groups in mind.
 
-            Example:
-            kf.sort("col1")
-            kf.sort(["col1", "col2"], ascending=[True, False])
+        <pre>Example:
+        kf.sort("col1")
+        kf.sort(["col1", "col2"], ascending=[True, False])
+        </pre>
         """
         df_copy = self.df.copy()
         sort_cols = self.groups + [arg for arg in args]
@@ -172,9 +181,10 @@ class Frame:
         Calling .agg after grouping will remove it. Otherwise you need to call .ungroup
         if you want to remove the grouping on the datastructure.
 
-            Example:
-            kf.group_by("col1")
-            kf.group_by("col1", "col2")
+        <pre>Example:
+        kf.group_by("col1")
+        kf.group_by("col1", "col2")
+        </pre>
         """
         group_names = [_ for _ in args]
         if any([_ not in self.df.columns for _ in group_names]):
@@ -189,14 +199,15 @@ class Frame:
 
     def pipe(self, func, *args, **kwargs):
         """
-        Pipe the datastructure through a large function. Works just like .pipe in pandas.
+        Pipe the datastructure through a large function. Wrapper of `.pipe` in pandas.
 
-            Example:
-            def large_function1(frame):
-                <stuff>
-            def large_function2(frame):
-                <stuff>
-            kf.pipe(large_function1).pipe(large_function2)
+        <pre>Example:
+        def large_function1(frame):
+            ...stuff...
+        def large_function2(frame):
+            ...stuff...
+        kf.pipe(large_function1).pipe(large_function2)
+        </pre>
         """
         df_copy = self.df.copy()
         new_df = df_copy.pipe(func, *args, **kwargs)
@@ -211,14 +222,15 @@ class Frame:
         Aggregates the datastructure. Commonly works with .group_by. If no grouping
         is present it will just aggregate the entire table.
 
-            Examples:
-            kd.group_by("col1").agg(m1 = lambda _: np.mean(_['m1']))
+        <pre>Examples:
+        kd.group_by("col1").agg(m1 = lambda _: np.mean(_['m1']))
 
-            (kd
-             .group_by("col1", "col2")
-             .agg(m1 = lambda _: np.mean(_['m1']),
-                  m2 = lambda _: np.mean(_['m2']),
-                  c = lambda _: np.cov(_['m1'], _['m2'])[1,1]))
+        (kd
+         .group_by("col1", "col2")
+         .agg(m1 = lambda _: np.mean(_['m1']),
+              m2 = lambda _: np.mean(_['m2']),
+              c = lambda _: np.cov(_['m1'], _['m2'])[1,1]))
+         </pre>
         """
         if len(self.groups) == 0:
             return self._agg_nogroups(**kwargs)
@@ -233,7 +245,7 @@ class Frame:
         """
         Turns a wide dataframe into a long one. Removes any grouping.
 
-        Example:
+        <pre>Example:
         df = pd.DataFrame({
             'a': np.random.random(8),
             'b': np.random.random(8)*3,
@@ -241,6 +253,7 @@ class Frame:
         })
         tf = tb.Tibble(df)
         kf.gather("key", "value")
+        </pre>
         """
         copy_df = self.df.copy()
         copy_df = pd.melt(copy_df,
@@ -252,7 +265,7 @@ class Frame:
         """
         Turns a long dataframe into a wide one.
 
-        CURRENTLY UNIMPLEMENTED!
+        <pre>CURRENTLY UNIMPLEMENTED!</pre>
         """
         pass
 
@@ -260,9 +273,10 @@ class Frame:
         """
         Samples `n_samples` rows from the datastructure. You can do it with, or without, replacement.
 
-            Example:
-            kf.n_sample(100)
-            kf.n_sample(1000, replace = True)
+        <pre>Example:
+        kf.n_sample(100)
+        kf.n_sample(1000, replace = True)
+        </pre>
         """
         df_copy = self.df.copy()
         idx = np.arange(df_copy.shape[0])
@@ -273,8 +287,9 @@ class Frame:
         """
         Mimic of pandas head function. Selects `n` top rows.
 
-            Example:
-            kf.head(10)
+        <pre>Example:
+        kf.head(10)
+        </pre>
         """
         return Frame(self.df.copy().head(n), self.groups[:])
 
@@ -282,8 +297,9 @@ class Frame:
         """
         Mimic of pandas tail function. Selects `n` bottom rows.
 
-            Example:
-            kf.tail(10)
+        <pre>Example:
+        kf.tail(10)
+        </pre>
         """
         return Frame(self.df.copy().tail(n), self.groups[:])
 
@@ -291,9 +307,10 @@ class Frame:
         """
         Slice away rows of the dataframe based on row number.
 
-        Example:
+        <pre>Example:
         kf.slice(1,2,3)
         kf.slice([1,2,3,])
+        </pre>
         """
         if len(args) > 1:
             return self.slice(args)
