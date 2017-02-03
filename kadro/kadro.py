@@ -35,7 +35,10 @@ class Frame:
         res = "Pandas derived TibbleFrame Object.\n"
         if len(self.groups) > 0:
             res += "With groups {}\n".format(self.groups)
-        return res + "\n" + str(self.df.head(10))
+        res = res + "\n" + str(self.df.head(10))
+        if self.df.shape[0] > 10:
+            res = res + "\n only showing top 10 rows."
+        return res
 
     def _group_mutate(self, **kwargs):
         df_copy = self.df.copy()
