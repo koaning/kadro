@@ -5,6 +5,6 @@ setup(name='kadro',
       description='Pandas Wrapper with Composable Grammar Support',
       author='Vincent D. Warmerdam',
       author_email='vincentwarmerdam@gmail.com',
-      url='koaning.io',
+      url='https://github.com/koaning/kadro',
       packages=['kadro',],
       install_requires=['pandas', 'numpy', 'pytest'],)
