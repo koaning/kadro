@@ -5,31 +5,40 @@ import itertools as it
 
 class Frame:
     """
-    A datastructure that adds methods on top of pandas.
+    Add a group to the datastructure. Will have effect on .agg/.sort/.mutate methods.
+    Calling .agg after grouping will remove it. Otherwise you need to call .ungroup
+    if you want to remove the grouping on the datastructure.
 
-    Example:
-    import numpy as np
-    import pandas as pd
-    import kadro as kd
+        Example:
+        import numpy as np
+        import pandas as pd
+        import kadro as kd
 
-    np.random.seed(42)
-    n = 40
+        np.random.seed(42)
+        n = 40
+        r1 = np.random.rand(n)
+        r2 = np.random.rand(n)
 
-    df = pd.DataFrame({
-        'a': np.random.randn(n),
-        'b': np.random.randn(n),
-        'c': ['foo' if x > 0.5 else 'bar' for x in np.random.rand(n)],
-        'd': ['fizz' if x > 0.5 else 'bo' for x in np.random.rand(n)]
-    })
+        df = pd.DataFrame({
+            'a': np.random.randn(n),
+            'b': np.random.randn(n),
+            'c': ['foo' if x > 0.5 else 'bar' for x in r1],
+            'd': ['fizz' if x > 0.5 else 'bo' for x in r2]
+        })
 
-    kf = kd.Frame(df)
+        kf = kd.Frame(df)
     """
     def __init__(self, df, groups = []):
         self.df = df.copy()
+        """The original pandas representation of the datastructure."""
         self.df.index = np.arange(df.shape[0])
+        """The index of the pandas representation. It is ignored by all methods."""
         self.shape = self.df.shape
+        """The shape of the pandas representation of the datastructure."""
         self.groups = groups
+        """A list containing the groups that are currently specified."""
         self.columns = df.columns
+        """The column names of the frame."""
 
     def __repr__(self):
         res = "Pandas derived TibbleFrame Object.\n"
@@ -52,6 +61,9 @@ class Frame:
     def show(self, n = 10):
         """
         Shows the `n` top items of a the datastructure.
+
+            Example:
+            kd.show(20)
         """
         res = "Pandas derived TibbleFrame Object.\n"
         if len(self.groups) > 0:
@@ -68,8 +80,8 @@ class Frame:
         """
         Creates or changes a column. Keeps groups in mind.
 
-        Example:
-        kf.mutate(a = lambda _: _['col1'] + _['col2']*2)
+            Example:
+            kf.mutate(a = lambda _: _['col1'] + _['col2']*2)
         """
         if len(self.groups) != 0:
             return self._group_mutate(**kwargs)
@@ -82,8 +94,8 @@ class Frame:
         """
         Filter rows to keep.
 
-        Example: Example:
-        kf.filter(lambda _: _['col1'] > 20)
+            Example:
+            kf.filter(lambda _: _['col1'] > 20)
         """
         df_copy = self.df.copy()
         for func in args:
@@ -109,8 +121,8 @@ class Frame:
         Expects a a dictionary of strings where the keys represent
         the old names and the values represent the new names.
 
-        Example:
-        kf.rename({"aa":"a", "bb":"b"})
+            Example:
+            kf.rename({"aa":"a", "bb":"b"})
         """
         df_copy = self.df.copy()
         df_copy = df_copy.rename(index=str, columns = rename_dict)
@@ -121,8 +133,8 @@ class Frame:
         """
         Expects a list of strings and will reset the column names.
 
-        Example:
-        kf.set_names(["a", "b", "c", "omg_d")
+            Example:
+            kf.set_names(["a", "b", "c", "omg_d")
         """
         df_copy = self.df.copy()
         df_copy.columns = names
@@ -132,9 +144,9 @@ class Frame:
         """
         Drops columns from the dataframe.
 
-        Example:
-        kf.drop("col1")
-        kf.drop(["col1", "col2"])
+            Example:
+            kf.drop("col1")
+            kf.drop(["col1", "col2"])
         """
         df_copy = self.df.copy()
         columns = [_ for _ in df_copy.columns if _ not in it.chain(*args)]
@@ -145,9 +157,9 @@ class Frame:
         Sort the data structure based on *args passed in.
         Works just like .sort_values in pandas but keeps groups in mind.
 
-        Example:
-        kf.sort("col1")
-        kf.sort(["col1", "col2"], ascending=[True, False])
+            Example:
+            kf.sort("col1")
+            kf.sort(["col1", "col2"], ascending=[True, False])
         """
         df_copy = self.df.copy()
         sort_cols = self.groups + [arg for arg in args]
@@ -160,9 +172,9 @@ class Frame:
         Calling .agg after grouping will remove it. Otherwise you need to call .ungroup
         if you want to remove the grouping on the datastructure.
 
-        Example:
-        kf.group_by("col1")
-        kf.group_by("col1", "col2")
+            Example:
+            kf.group_by("col1")
+            kf.group_by("col1", "col2")
         """
         group_names = [_ for _ in args]
         if any([_ not in self.df.columns for _ in group_names]):
@@ -179,12 +191,12 @@ class Frame:
         """
         Pipe the datastructure through a large function. Works just like .pipe in pandas.
 
-        Example:
-        def large_function1(frame):
-            <stuff>
-        def large_function2(frame):
-            <stuff>
-        kf.pipe(large_function1).pipe(large_function2)
+            Example:
+            def large_function1(frame):
+                <stuff>
+            def large_function2(frame):
+                <stuff>
+            kf.pipe(large_function1).pipe(large_function2)
         """
         df_copy = self.df.copy()
         new_df = df_copy.pipe(func, *args, **kwargs)
@@ -199,15 +211,14 @@ class Frame:
         Aggregates the datastructure. Commonly works with .group_by. If no grouping
         is present it will just aggregate the entire table.
 
-        Example:
-        kf.group_by("col1").agg(m1 = lambda _: np.mean(_['m1']))
+            Examples:
+            kd.group_by("col1").agg(m1 = lambda _: np.mean(_['m1']))
 
-        Example:
-        (tf
-         .group_by("col1", "col2")
-         .agg(m1 = lambda _: np.mean(_['m1']),
-              m2 = lambda _: np.mean(_['m2']),
-              c = lambda _: np.cov(_['m1'], _['m2'])[1,1]))
+            (kd
+             .group_by("col1", "col2")
+             .agg(m1 = lambda _: np.mean(_['m1']),
+                  m2 = lambda _: np.mean(_['m2']),
+                  c = lambda _: np.cov(_['m1'], _['m2'])[1,1]))
         """
         if len(self.groups) == 0:
             return self._agg_nogroups(**kwargs)
@@ -249,9 +260,9 @@ class Frame:
         """
         Samples `n_samples` rows from the datastructure. You can do it with, or without, replacement.
 
-        Example:
-        kf.n_sample(100)
-        kf.n_sample(1000, replace = True)
+            Example:
+            kf.n_sample(100)
+            kf.n_sample(1000, replace = True)
         """
         df_copy = self.df.copy()
         idx = np.arange(df_copy.shape[0])
@@ -262,8 +273,8 @@ class Frame:
         """
         Mimic of pandas head function. Selects `n` top rows.
 
-        Example:
-        kf.head(10)
+            Example:
+            kf.head(10)
         """
         return Frame(self.df.copy().head(n), self.groups[:])
 
@@ -271,8 +282,8 @@ class Frame:
         """
         Mimic of pandas tail function. Selects `n` bottom rows.
 
-        Example:
-        kf.tail(10)
+            Example:
+            kf.tail(10)
         """
         return Frame(self.df.copy().tail(n), self.groups[:])
 
