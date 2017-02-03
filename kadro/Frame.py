@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import itertools as it
 
-
 class Frame:
     """
     Creates a `kadro.Frame` object out of a `pandas.DataFrame` object. Will ignore index.

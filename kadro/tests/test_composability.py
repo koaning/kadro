@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from kadro import kadro as tb
+from kadro import Frame as tb
 
 np.random.seed(42)
 n = 20
