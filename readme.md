@@ -9,7 +9,11 @@
 Kadro is a small python package that wraps a little bit of extra functionality around pandas. The goal is to add more functional methods such that you can use pandas in a more composable manner. For example, you may do queries like;
 
 ```
+import numpy as np
+import pandas as pd
 import kadro as kd
+
+df = pd.read_csv(<some_file>)
 
 (kd.Frame(df)
   .mutate(e = lambda _: _.a + _.b,
@@ -86,7 +90,7 @@ python setup.py install
 
 ## Contributions
 
-Contributions are welcome but the package is to remain minimal. If people want to add some extra tests; thats fine. You can run tests via;
+Contributions are welcome but the package is to remain minimal. If people want to add some extra tests; thats fine and always welcome. You can run tests via;
 
 ```
 pytest
@@ -94,5 +98,7 @@ pytest
 
 ## Future
 
-This package is a little bit experimental in nature and was originally meant as a peronsal project. I may extra support if it gets traction. Feel free to notify me of issues.
+This package is not much more than an alternative ui in nature. Originally meant as a peronsal project and I don't expect many changes are ever needed. I may extra support if it gets traction but the package is intentionally minimal.
+
+Feel free to notify me of issues.
 
