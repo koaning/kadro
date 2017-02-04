@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from kadro import Frame as tb
+import kadro as kd
 
 np.random.seed(42)
 n = 20
@@ -12,13 +12,13 @@ df = pd.DataFrame({
     'd': ['fizz' if x > 0.6 else 'bo' for x in np.random.rand(n)]
 })
 df = df.sort_values(['c', 'd'])
-tf = tb.Frame(df)
+kf = kd.Frame(df)
 
 class Composables(unittest.TestCase):
 
     def test_compose1(self):
         """Test that grouping has an effect on mutate."""
-        new = (tf
+        new = (kf
                .group_by('c', 'd')
                .mutate(e = lambda _: _['a'].shift())
                .ungroup())
