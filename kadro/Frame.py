@@ -326,11 +326,55 @@ class Frame:
                 raise ValueError("Column {} does not overlap in both datastructures".format(i))
 
     def left_join(self, other, by = None):
+        """
+        Perform a left join.
+
+        <pre>import pandas as pd
+        import kadro as kd
+
+        df_age = pd.DataFrame({
+            'name': ['vincent', 'tim', 'anna'],
+            'age': [28, 30, 25]
+        })
+
+        df_length = pd.DataFrame({
+            'name': ['vincent', 'tim'],
+            'length': [188, 172]
+        })
+
+        kd_age = kd.Frame(df_age)
+        kd_length = kd.Frame(df_length)
+
+        kd_age.left_join(kd_length)
+        </pre>
+        """
         self._check_join_params(other, by)
         new = pd.merge(self.df.copy(), other.df.copy(), how = 'left', on = by)
         return Frame(new, self.groups[:])
 
     def inner_join(self, other, by = None):
+        """
+        Perform an inner join.
+
+        <pre>import pandas as pd
+        import kadro as kd
+
+        df_age = pd.DataFrame({
+            'name': ['vincent', 'tim', 'anna'],
+            'age': [28, 30, 25]
+        })
+
+        df_length = pd.DataFrame({
+            'name': ['vincent', 'tim'],
+            'length': [188, 172]
+        })
+
+        kd_age = kd.Frame(df_age)
+        kd_length = kd.Frame(df_length)
+
+        kd_age.inner_join(kd_length)
+        </pre>
+        """
         self._check_join_params(other, by)
         new = pd.merge(self.df.copy(), other.df.copy(), how = 'inner', on = by)
         return Frame(new, self.groups[:])

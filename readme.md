@@ -70,9 +70,9 @@ Currently, the following verbs are supported in Kadro;
 - sort
 - sample_n
 - pipe
-- ~~gather/spread~~
-- ~~left_join/inner_join~~
+- left_join/inner_join
 - plot
+- ~~gather/spread~~
 
 ## Vignette
 
