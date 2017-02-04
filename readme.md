@@ -76,9 +76,9 @@ Currently, the following verbs are supported in Kadro;
 
 ## Vignette
 
-We do not host documentation for this small package currently.
+We do host documentation for this small package over at https://koaning.github.io/kadro/.
 
-Instead you fill find that all methods are properly documented with a docstring and that perhaps the best way to understand the library is to read the vignette; a notebook containing a demonstration of all the functionality from a-z. In the main of the repo you'll find a notebook containing a demonstration of all the functionality which can render from github.
+Instead of mere documentation you fill find that all methods are properly documented with a docstring and that perhaps the best way to understand the library is to read the vignette; a notebook containing a demonstration of all the functionality from a-z. In the main of the repo you'll find a notebook containing a demonstration of all the functionality which can render from github.
 
 ## Installation
 
@@ -100,6 +100,7 @@ And you can update the docs by running the following from the `/docs` folder;
 
 ```
 pdoc --html --overwrite kadro.Frame
+cp kadro/Frame.m.html index.html
 ```
 
 
