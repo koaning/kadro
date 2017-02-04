@@ -82,7 +82,7 @@ Instead of mere documentation you fill find that all methods are properly docume
 
 ## Installation
 
-Working on pip/conda, for now you can install kadro via;
+Pip/Conda support is not here yet. In the meantime you can start playing with this package by running;
 
 ```
 python setup.py install
@@ -101,6 +101,7 @@ And you can update the docs by running the following from the `/docs` folder;
 ```
 pdoc --html --overwrite kadro.Frame
 cp kadro/Frame.m.html index.html
+rm -rf kadro
 ```
 
 
