@@ -305,6 +305,7 @@ class Frame:
     def slice(self, *args):
         """
         Slice away rows of the dataframe based on row number.
+        Remember; these Frames start at 0.
 
         <pre>Example:
         kf.slice(1,2,3)
@@ -327,9 +328,10 @@ class Frame:
 
     def left_join(self, other, by = None):
         """
-        Perform a left join.
+        Perform a left join with another frame.
 
-        <pre>import pandas as pd
+        <pre>Example:
+        import pandas as pd
         import kadro as kd
 
         df_age = pd.DataFrame({
@@ -354,9 +356,10 @@ class Frame:
 
     def inner_join(self, other, by = None):
         """
-        Perform an inner join.
+        Perform an inner join with another frame.
 
-        <pre>import pandas as pd
+        <pre>Example:
+        import pandas as pd
         import kadro as kd
 
         df_age = pd.DataFrame({
