@@ -96,6 +96,13 @@ Contributions are welcome but the package is to remain minimal. If people want t
 pytest
 ```
 
+And you can update the docs by running the following from the `/docs` folder;
+
+```
+pdoc --html --overwrite kadro.Frame
+```
+
+
 ## Future
 
 This package is not much more than an alternative ui in nature. Originally meant as a peronsal project and I don't expect many changes are ever needed. I may extra support if it gets traction but the package is intentionally minimal.
