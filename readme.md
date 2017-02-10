@@ -74,7 +74,7 @@ Currently, the following verbs are supported in Kadro;
 - plot
 - ~~gather/spread~~
 
-## Vignette
+## Documentation and Vignette
 
 You can find elaborate documentation here; https://koaning.github.io/kadro/.
 

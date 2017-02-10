@@ -86,5 +86,15 @@ class TestSamplers(unittest.TestCase):
         self.assertEquals(new.shape[0], 5)
         self.assertEquals(new.df.iloc[0]['a'], new.df.iloc[2]['a'])
 
+class TestDropDuplicates(unittest.TestCase):
+
+    def test_drop_duplicates1(self):
+        kf_double = kd.Frame(pd.concat([df, df]))
+        self.assertEquals(kf_double.drop_duplicates().shape[0], df.shape[0])
+
+    def test_drop_duplicates2(self):
+        self.assertEquals(kf.drop_duplicates().shape[0], kf.shape[0])
+
+
 if __name__ == '__main__':
     unittest.main()

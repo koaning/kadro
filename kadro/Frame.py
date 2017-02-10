@@ -148,7 +148,7 @@ class Frame():
 
     def drop(self, *args):
         """
-        Drops columns from the dataframe.
+        Drops columns from the frame.
 
         <pre>Example:
         kf.drop("col1")
@@ -158,6 +158,35 @@ class Frame():
         df_copy = self.df.copy()
         columns = [_ for _ in df_copy.columns if _ not in it.chain(*args)]
         return Frame(df_copy[columns], self.groups[:])
+
+
+    def drop_duplicates(self, *args):
+        """
+        Removes all the duplicate rows in the frame.
+        Works just like the pandas method.
+
+        <pre>Example:
+        kf.drop_duplicates()
+        </pre>
+        """
+        df_copy = self.df.copy()
+        df_copy = df_copy.drop_duplicates(*args)
+        return Frame(df_copy, self.groups[:])
+
+
+    def complete_cases(self):
+        """
+        Removes all the duplicate rows in the frame.
+        Works just like the pandas method.
+
+        <pre>Example:
+        kf.complete_cases()
+        </pre>
+        """
+        df_copy = self.df.copy()
+        df_copy = df_copy.drop_na()
+        return Frame(df_copy, self.groups[:])
+
 
     def sort(self, *args, ascending=True):
         """
