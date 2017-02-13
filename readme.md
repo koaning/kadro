@@ -82,7 +82,14 @@ Instead of mere documentation you fill find that all methods are properly docume
 
 ## Installation
 
-Pip/Conda support is not here yet. In the meantime you can start playing with this package by running;
+Pip/Conda support is not fully up. You can use pip to install it via github tho.
+
+```
+pip install git+git://github.com/koaning/kadro.git
+```
+
+
+Otherwise, consider downloading and playing with this package by running;
 
 ```
 python setup.py install
