@@ -22,7 +22,6 @@ class Composables(unittest.TestCase):
                .group_by('c', 'd')
                .mutate(e = lambda _: _['a'].shift())
                .ungroup())
-        print(new)
         self.assertEqual(len(new.groups), 0)
         self.assertEqual(new.df.iloc[0]['a'], new.df.iloc[1]['e'])
         self.assertEqual(np.isnan(new.df.iloc[0]['e']), True)

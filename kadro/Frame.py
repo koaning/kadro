@@ -184,8 +184,7 @@ class Frame():
         </pre>
         """
         df_copy = self.df.copy()
-        df_copy = df_copy.drop_na()
-        return Frame(df_copy, self.groups[:])
+        return Frame(df_copy.drop_na(), self.groups[:])
 
 
     def sort(self, *args, ascending=True):
