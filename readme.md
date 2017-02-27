@@ -72,7 +72,6 @@ Currently, the following verbs are supported in Kadro;
 - pipe
 - left_join/inner_join
 - plot
-- ~~gather/spread~~
 
 ## Documentation and Vignette
 

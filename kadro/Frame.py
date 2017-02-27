@@ -268,30 +268,17 @@ class Frame():
         res.columns = self.groups + list(kwargs.keys())
         return Frame(res, [])
 
-    def gather(self, key="key", value="value", keep=[]):
+    def gather(self, key="key", value="value", **kwargs):
         """
         Turns a wide dataframe into a long one. Removes any grouping.
 
-        <pre>Example:
-        df = pd.DataFrame({
-            'a': np.random.random(8),
-            'b': np.random.random(8)*3,
-            'c': 'a,a,a,a,b,b,b,b'.split(',')
-        })
-        tf = tb.Tibble(df)
-        kf.gather("key", "value")
-        </pre>
+        <pre>CURRENTLY UNIMPLEMENTED!</pre>
         """
-        copy_df = self.df.copy()
-        copy_df = pd.melt(copy_df,
-                          id_vars = keep,
-                          value_vars=[_ for _ in copy_df.columns if _ not in keep])
-        return Frame(copy_df, []).rename({"variable": key, "value": value})
+        pass
 
     def spread(self, key="key", value="key", keep=[]):
         """
         Turns a long dataframe into a wide one.
-
         <pre>CURRENTLY UNIMPLEMENTED!</pre>
         """
         pass
