@@ -1,6 +1,6 @@
 # kadro.py
 
-### Kadro is still in some development. A few methods are still missing.
+### Kadro is still in some development. It only supports python 3.
 
 > Kadro means frame in esperanto.
 
