@@ -187,7 +187,7 @@ class Frame():
         return Frame(df_copy.drop_na(), self.groups[:])
 
 
-    def sort(self, *args, ascending=True):
+    def sort(self, ascending=True, *args):
         """
         Sort the data structure based on *args passed in.
         Works just like .sort_values in pandas but keeps groups in mind.
